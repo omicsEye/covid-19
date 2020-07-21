@@ -8,7 +8,7 @@ setwd("~/Box/COVID19_Project")
 
 regions <- c("S", "E", "M", 'N', 'ORF1a', 'ORF1b', 'ORF1ab', 'ORF3a', 'ORF6', 'ORF7a', 'ORF7b', 'ORF8', 'ORF10') #'reference'
 num_samples <- 500
-similarity_method <- 'K80' #'K80'
+similarity_method <- 'TN93' #'K80'
 
 # Creat a dirctory for MaAsLin input files
 output_path <- paste('data/Distances_0508/',similarity_method, sep = '')
