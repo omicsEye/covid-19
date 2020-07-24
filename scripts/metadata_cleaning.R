@@ -19,7 +19,7 @@ metadata$date[metadata$date=="2020"] <- "2020-01-01"
 metadata$date[metadata$date=="2020-01"] <- "2020-01-01"
 
 #set a start date for COVID-19 pandamic
-start <- "2019-12-07" 
+start <- "2019-12-01" 
 Days_from_start <- as.Date(metadata$date)-as.Date(start)
 metadata$Days <- Days_from_start
 
@@ -36,7 +36,8 @@ metadata2[metadata2 == 'nan'] <- NA
 
 # add a column with number of availble metadata 
 metadata2$n <- rowSums(!is.na(metadata2))
-# filter to rowas with complete metadata
+
+# filter to rows with complete metadata
 comp_meta <- metadata2[complete.cases(metadata2), ]
 
 
