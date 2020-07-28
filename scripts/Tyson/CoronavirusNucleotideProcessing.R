@@ -8,11 +8,14 @@
 # analysis.
 
 #Load necessary libraries
+
+#BiocManager::install("genbankr") #works with R version 3.6.3
+
 library(genbankr)
 library(Biostrings)
 library(stringr)
 #Change to your working directory
-setwd("C:\\Users\\tyson\\OneDrive\\Desktop\\Coronavirus Proteins\\Reference_Nucleotide_Sequences")
+setwd("~/Box/COVID19_Project/data/Nucleotide/")
 
 #Use genbankr methods to load SARS-CoV-2 genbank file
 id=GBAccession("NC_045512.2") #Accession number for SARS-CoV-2 Ref
@@ -54,7 +57,7 @@ locusTable$Sequences=colOfSequences
 
 #Next we load our alignment and put the sequences into a
 #dataframe that can be easily parsed
-con = file("COVID_ancestral_alignment_nucleotide.fasta", "r")
+con = file("../hcov_mers_bat_covid_0421/subsample_test.fasta", "r")
 #We will make a vector of sequence names ie MERS, BatCoronavirusAncestor1, etc.
 sequenceNames=c()
 #We will make a vector of nucleotide sequences
@@ -90,7 +93,8 @@ for(x in locusTable$Sequences){
   #Use low gap penalty so that we can account for gaps introduced by msa
   localAlign <-
     pairwiseAlignment(x,
-                      alignmentTable$sequenceContents[which(alignmentTable$sequenceNames==">NC_045512_SARSCoV2 |Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1| complete genome")],
+                      #alignmentTable$sequenceContents[which(alignmentTable$sequenceNames==">NC_045512_SARSCoV2 |Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1| complete genome")], # I am changing this so that the alignment does not have to include this sequence
+                      alignmentTable$sequenceContents[1],
                       gapOpening=-0.1, 
                       gapExtension=-0.01,
                       scoreOnly=FALSE,
@@ -98,7 +102,7 @@ for(x in locusTable$Sequences){
   listOfGenomes=c()
   #Error check whether our sequence from the alignment is the same as the
   #query but with gaps
-  if(x!=str_remove_all(substring(alignmentTable$sequenceContents[which(alignmentTable$sequenceNames==">NC_045512_SARSCoV2 |Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1| complete genome")],
+  if(x!=str_remove_all(substring(alignmentTable$sequenceContents[1], #Becca changed this to hopefully be more universal
                   localAlign@subject@range@start,
                   localAlign@subject@range@start + localAlign@subject@range@width-1), "-")){
     print(paste("There was an error with the alignment step for the locus",
@@ -129,14 +133,14 @@ for(x in locusTable$Sequences){
 #Set the row names to the list of genomes we made earlier (line 105)
 row.names(myTable)=listOfRows
 #Write results to a table
-write.table(cbind(row.names(myTable),myTable), file="SequenceTable.csv", quote=FALSE, sep=",", row.names = FALSE)
+write.table(cbind(row.names(myTable),myTable), file="becca/SequenceTable.csv", quote=FALSE, sep=",", row.names = FALSE)
 
 #Write results to a multifasta file
 for(y in 1:length(row.names(myTable))){
   for(z in 1:length(colnames(myTable))){
     header=paste(row.names(myTable)[y], colnames(myTable)[z], sep = " ")
     mySequence=paste("\n", myTable[y,z], "\n", sep="")
-    cat(header, file="18CoronavirusesMSA.fasta", append = TRUE)
-    cat(mySequence, file="18CoronavirusesMSA.fasta", append = TRUE)
+    cat(header, file="becca/18CoronavirusesMSA.fasta", append = TRUE)
+    cat(mySequence, file="becca/18CoronavirusesMSA.fasta", append = TRUE)
   }
 }
