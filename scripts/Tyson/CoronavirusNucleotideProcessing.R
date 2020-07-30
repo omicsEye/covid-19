@@ -34,7 +34,7 @@ myGenes$end=myGenes$start + gb@genes@ranges@width -1
 #Select columns that we need
 myGenes=myGenes[,c(2,12,13)]
 myOtherFeatures=myOtherFeatures[,c(5,10,11)]
-# I want to add a gene that is just ORF1a and one that is just ORF1b
+# I want to add a gene that is just ORF1a and one that is just ORF1b, got lengths from https://genome.ucsc.edu/cgi-bin/hgc?hgsid=866104669_ggyLObfRUiVpdbFNcgq2pIdOTbfV&c=NC_045512v2&l=0&r=29903&o=265&t=13468&g=nextstrainGene&i=ORF1a
 # first add levels
 levels(myGenes$gene)<-c(levels(myGenes$gene),"ORF1a","ORF1b")
 myGenes<-rbind(myGenes,c('ORF1a',266,13469))
