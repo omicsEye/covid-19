@@ -21,10 +21,14 @@ Steps for the analyses that we will do: <br/>
   5) separate both alignments by locus.
   
   6) make trees using raxml for 
-  a) GISAID + NCBI (whole genome)
-  b) GISAID + NCBI (each gene)
   
-  7) Make distance matrices for a) GISAID genome alignment, b) GISAID individual gene alignments, c) GISAID+NCBI genome alignment, d) GISAID+NCBI individual alignments
+    a) GISAID + NCBI (whole genome)
+    
+    b) GISAID + NCBI (each gene)
   
-  8) Run m2clust on everything.
+  7) Visualize trees and metadata with [iTOL](scripts/iTOL/itol.md)
+  
+  8) Make distance matrices for a) GISAID genome alignment, b) GISAID individual gene alignments, c) GISAID+NCBI genome alignment, d) GISAID+NCBI individual alignments
+  
+  9) Run m2clust on everything.
 
