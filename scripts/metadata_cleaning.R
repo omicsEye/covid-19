@@ -1,6 +1,7 @@
 #####metadata cleaning
 
-#This script takes in the raw metadata file from GISAID, formats into a standard format, and then outputs 3 files 1) formatted metadata, 2) subset of metadata that has complete metadata, 3) subset of complete metadata that has 5 of each clade
+#This script takes in the raw metadata file from GISAID, formats into a standard format, and then outputs 
+# 3 files 1) formatted metadata, 2) subset of metadata that has complete metadata, 3) subset of metadata that has a portion of each clade
 # first download raw reads from gisaid
 # log in to https://www.epicov.org/epi3/frontend#49f1a9 after you have applied for an account
 # Under the Epicov tab, click "Downloads" and click on the most recent msa file as well as "nextmeta" to download the metadata
