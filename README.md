@@ -26,7 +26,7 @@ Steps for the analyses that we will do: <br/>
     
     b) GISAID + NCBI (each gene)
   
-  7) Visualize trees and metadata with [iTOL](scripts/iTOL/iTOL.md)
+  7) Visualize trees and metadata with [iTOL](scripts/iTOL/itol.md)
   
   8) Make distance matrices for a) GISAID genome alignment, b) GISAID individual gene alignments, c) GISAID+NCBI genome alignment, d) GISAID+NCBI individual alignments
   
