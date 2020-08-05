@@ -14,7 +14,7 @@ Steps for the analyses that we will do: <br/>
   
   2) Format names of fasta files from GISAID and NCBI and combine portion of GISAID with NCBI into one fasta
   
-  3) Format metadata from GISAID, retrieve metadata from NCBI, combine into one fasta
+  3) [Format metadata from GISAID](scripts/metadata_cleaning.r), retrieve and format [metadata from NCBI](scripts/metadata_cleaning_NCBI.r), combine into one file
   
   4) Align GISAID and NCBI sequences using mafft
   
