@@ -58,7 +58,7 @@ metadata$age <- cut(as.numeric(metadata$age), breaks = seq(0,100,by=15), right =
 metadata$n <- rowSums(!is.na(metadata))
 
 # filter to rows with complete metadata
-comp_meta <- metadata2[complete.cases(metadata2), ]
+comp_meta <- metadata[complete.cases(metadata), ]
 
 #make a subset of this that has sequences from each type of pangolin thing (using Tyson's python script)
 #read in list of sequences: 
