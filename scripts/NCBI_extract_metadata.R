@@ -1,11 +1,7 @@
- 
-#from raw data to metadata and ready for analysis
+ #### NCBI metadata extraction and cleaning and combining with GISAID ----
+# This script takes in 4 fasta files that are downloaded from NCBI (bat, MERS, SARS, OUTgroup). It changes their name to be a unique name from NCBI, and extracts the metadata.  It also takes in GISAID data and metadata and concatenates the two together
 # Rebecca Clement rebeccaclement@gwu.edu
-# June 29, 2020
-
-# first download raw reads from gisaid
-# log in to https://www.epicov.org/epi3/frontend#49f1a9 after you have applied for an account
-# Under the Epicov tab, click "Downloads" and click on the most recent msa file as well as "nextmeta" to download the metadata
+# Aug 4, 2020
 
 #load libraries
 library(phangorn)
@@ -16,53 +12,12 @@ library("rentrez")
 
 setwd("~/Box/COVID19_Project")
 
-#### read in the msa ----
-seq <- read.FASTA('data/msa_0613/msa_0613.fasta')
-length(seq) #41748
-names(seq)<-str_split_fixed(names(seq), "\\|",3)[,2]
-seq_complete<-seq[names(seq)!=""] #length is now 15745
+#### read in complete metadata from GISAID ----
+metadata<-read.delim("data/MetaData/complete_metadata_0804.tsv")
+dim(metadata) #22759 entries, 12 columns
 
-#### format metadata file ----
-metadat<-read.delim("data/msa_0613/metadata_2020-06-16_11-55.tsv")
-dim(metadat) #46474 entries
-#Get only the metadata that goes with the formatted fasta
-metadat_genome<-metadat[metadat$gisaid_epi_isl%in%names(seq_complete),] #41721 entries
-# keep only the formatted fasta files that are in the metadata
-names(seq_complete[names(seq_complete)%in%metadat$gisaid_epi_isl==FALSE])
-genome_seq<-seq_complete[names(seq_complete)%in%metadat$gisaid_epi_isl==TRUE]
-length(genome_seq) #41721
-# write out formatted fasta file
-write.FASTA(genome_seq,"data/msa_0613/msa_0613_genome_formatted.fasta")
-
-#set names so that they are the EPI ones
-rownames(metadat_genome)<-metadat_genome$gisaid_epi_isl
-
-# select the metadata of interest
-metadata2 <- metadat_genome[, c("country", "country_exposure", "sex", "age","date","virus","host","region")]
-
-# replace charecters to be properly NAs
-metadata2[metadata2 == '?'] <- NA
-metadata2[metadata2 == 'nan'] <- NA
-
-#replace sex to be good
-metadata2$sex[metadata2$sex == 'FEmale'] <- 'Female'
-metadata2$sex[metadata2$sex == 'Woman'] <- 'Female'
-metadata2$sex[metadata2$sex == 'unknwon'] <- 'Unknown'
-table(metadata2$sex)
-
-#change dates to months
-metadata2$month<-str_split_fixed(metadata2$date, "\\-",3)[,2]
-metadata2$month<-month.abb[as.numeric(metadata2$month)]
-
-
-# categorize age as m2clust only accepts categorical data 
-metadata2$age <- cut(as.numeric(metadata2$age), breaks = seq(0,100,by=15), right = TRUE)
-
-#make a column that says which clade it is
-metadata2$clade <- 'covid19'
-
-# write the file
-write.table( metadata2,'data/MetaData/metadata_gisaid_0613.tsv' , sep = "\t", eol = "\n", col.names = NA, quote= F, row.names = T)
+#add a column that says which clade it is
+metadata$clade <- 'covid19'
 
  #### read in files from ncbi ----
 #read in bat files downloaded from https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SLen_i=29000%20TO%2040000&Completeness_s=complete&VirusLineage_ss=Bat%20SARS%20coronavirus%20HKU3,%20taxid:442736&VirusLineage_ss=Bat%20SARS-like%20coronavirus,%20taxid:1508227&VirusLineage_ss=Bat%20coronavirus,%20taxid:1508220
@@ -70,8 +25,9 @@ batseq <- read.FASTA('data/NCBI/bat-sequences.fasta')
 length(batseq) #20
 names(batseq)<-str_split_fixed(names(batseq), " ",2)[,1]
 #read in SARS files 
-covseq<-read.FASTA('data/NCBI/sars-cov-2_apr21.fasta') #942 sequences
-names(covseq)<-str_split_fixed(names(covseq), " ",2)[,1]
+# These are now included in GISAID data
+#covseq<-read.FASTA('data/NCBI/sars-cov-2_apr21.fasta') #942 sequences
+#names(covseq)<-str_split_fixed(names(covseq), " ",2)[,1]
 #read in COV19 files
 sarseq<-read.FASTA('data/NCBI/sars-related-coronavirus_apr21.fasta') #1254
 names(sarseq)<-str_split_fixed(names(sarseq), " ",2)[,1]
@@ -83,29 +39,26 @@ outseq<-read.FASTA('data/NCBI/outgoup.fasta') #43
 names(outseq)<-str_split_fixed(names(outseq), "\\|",2)[,2]
 names(outseq)<-str_split_fixed(names(outseq), "\\.",2)[,1]
 
+# Combine all NCBI sequences
+allNCBI<-c(batseq,merseq,sarseq,outseq)
+write.dna(batseq, "data/NCBI/batseq.fa", format="fasta")
+write.dna(merseq, "data/NCBI/merseq.fa", format="fasta")
+write.dna(outseq, "data/NCBI/outseq.fa", format="fasta")
+write.dna(sarseq, "data/NCBI/sarseq.fa", format="fasta")
+write.dna(allNCBI, "data/NCBI/NCBIseq.fa", format="fasta")
 
-#### combine subset of gisaid with these other sequences things ----
-#subset gisaid to 1000
-gisaid_sub <- genome_seq[sample(1:length(genome_seq), 1000, replace=F)]
-allseqs <- cbind(gisaid_sub,batseq,covseq,sarseq,merseq,outseq)
-write.dna(gisaid_sub, "~/Documents/Research/Crandall/Coronavirus/NCBI/gisaid.fa", format="fasta")
-write.dna(batseq, "~/Documents/Research/Crandall/Coronavirus/NCBI/batseq.fa", format="fasta")
-write.dna(covseq, "~/Documents/Research/Crandall/Coronavirus/NCBI/covseq.fa", format="fasta")
-write.dna(merseq, "~/Documents/Research/Crandall/Coronavirus/NCBI/merseq.fa", format="fasta")
-write.dna(outseq, "~/Documents/Research/Crandall/Coronavirus/NCBI/outseq.fa", format="fasta")
-write.dna(sarseq, "~/Documents/Research/Crandall/Coronavirus/NCBI/sarseq.fa", format="fasta")
-# in command line, combine these sequences
-# cat gisaid.fa batseq.fa covseq.fa merseq.fa outseq.fa sarseq.fa > allseqs.fa 
-# When you count, grep -c "^>" allseqs.fa Should add up to 3787. If it doesn't, open up in geneious and then export as fasta
-# align using mafft
+#upload GISAID Seq, get a subset of it, and then write DNA file
+covseq<-read.FASTA('data/gisaid_0804/msa_0804_complete.fasta') 
+GISAID_seq_sub <- covseq[sample(1:length(covseq), 2000, replace=F)]
+NCBI_GISAID<-c(batseq,merseq,sarseq,outseq,GISAID_seq_sub)
+write.dna(NCBI_GISAID, "data/NCBI/NCBI_gisaid0804_2000.fa", format="fasta")
 
-
-#get metadata of the gisaid_sub
-metadata_sub<-metadata2[names(gisaid_sub),]
-write.csv(as.data.frame(metadata_sub), file="~/Documents/Research/Crandall/Coronavirus/NCBI/metadata_sub.csv")
+#get metadata of the gisaid_sub #Come back here and fix this Aug9
+#metadata_sub<-subset(metadata,names(GISAID_seq_sub)%in%metadata$X)
+write.csv(as.data.frame(metadata_sub), file="data/NCBI/metadata_sub0804.csv")
 
 #make a metadata datafram that has all of the names
-ncbinames<-c(names(batseq),names(covseq),names(merseq),names(sarseq),names(outseq)) #there are 2787 total here
+ncbinames<-c(names(batseq),names(merseq),names(sarseq),names(outseq)) #there are 1845 total here
 #get rid of duplicates
 ncbinames<-ncbinames[!duplicated(ncbinames)] #now its length is 1844
 #### Entrez stuff ----
@@ -179,6 +132,9 @@ ncbimeta$clade <- ifelse(ncbimeta$organism=="Severe acute respiratory syndrome c
                                        ifelse(grepl("Bat", ncbimeta$organism, fixed = TRUE),'BAT',
                                               ifelse(grepl("SARS", ncbimeta$organism, fixed = TRUE),"SARS_related","outgroup" )))))
                        
+#read in NCBI metadata
+#ncbimeta<-read.csv('data/MetaData/NCBI_Metadata_parsed.csv')
+
 #get country to be better
 ncbimeta$country<-str_split_fixed(ncbimeta$country, ":",2)[,1]
 
@@ -193,9 +149,27 @@ rownames(ncbimeta)<-ncbimeta$caption
 ncbimeta$age<-NA
 ncbimeta$sex<-NA
 ncbimeta$region<-NA
+# fix dates
+metadata["EPI_ISL_436426", "date"] <- "2020-04-05"
+metadata$date[metadata$date=="2020"] <- "2020-01-01"
+metadata$date[metadata$date=="2020-01"] <- "2020-01-01"
+metadata$date[metadata$date=="2020-02"] <- "2020-02-01"
+metadata$date[metadata$date=="2020-03"] <- "2020-03-01"
+metadata$date[metadata$date=="2020-04"] <- "2020-04-01"
+metadata$date[metadata$date=="2020-05"] <- "2020-05-01"
+metadata$date[metadata$date=="2020-06"] <- "2020-06-01"
+metadata$date[metadata$date=="2020-07"] <- "2020-07-01"
+
+#set a start date for COVID-19 pandamic
+start <- "2019-12-01" 
+Days_from_start <- as.Date(metadata$date)-as.Date(start)
+metadata$Days <- Days_from_start
 
 #### Combine data frames ----
 ncbigisaid<-rbind(ncbimeta[,c("clade","country","month","age","sex","region")],metadata2[,c("clade","country","month","age","sex","region")])
 
 #export
 write.table(ncbigisaid,'data/MetaData/metadata_ncbi_gisaid_0613.tsv' , sep = "\t", eol = "\n", col.names = NA, quote= F, row.names = T)
+
+# write the file
+write.table( metadata2,'data/MetaData/metadata_gisaid_0613.tsv' , sep = "\t", eol = "\n", col.names = NA, quote= F, row.names = T)
