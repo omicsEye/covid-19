@@ -6,6 +6,8 @@ Steps for the analyses that we will do: <br/>
   b) Once you have an account, sign in [here](https://www.epicov.org/epi3/frontend#a3eb) with your username and password.
   
   c) From the EpiCov tab, click on `Downloads` and select the down arrow for the multiple sequence alignment (ex. MSA_0728), and the metadata (nextmeta)
+  
+  d) Extract from tar.xz file with `tar -xf file.tar.xz`
 </details> <br/>
 <details>
   <summary> 1) Download NCBI fasta files for each outgroup </summary>
@@ -20,9 +22,9 @@ Steps for the analyses that we will do: <br/>
    
   </details> <br/>
   
-  2) Format names of fasta files from GISAID and NCBI and combine portion of GISAID with NCBI into one fasta
+  2) Change names of GISAID fasta files to EPI IDs and [format metadata from GISAID](scripts/metadata_cleaning.R) 
   
-  3) [Format metadata from GISAID](scripts/metadata_cleaning.r), retrieve and format [metadata from NCBI](scripts/metadata_cleaning_NCBI.r), combine into one file
+  3) Retrieve and format [metadata from NCBI](scripts/NCBI_extract_metadata.R), combine files from NCBI and GISAID
   
   4) Align GISAID and NCBI sequences using mafft
   
