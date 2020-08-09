@@ -8,8 +8,16 @@ Steps for the analyses that we will do: <br/>
   c) From the EpiCov tab, click on `Downloads` and select the down arrow for the multiple sequence alignment (ex. MSA_0728), and the metadata (nextmeta)
 </details> <br/>
 <details>
-  <summary> 1) Download NCBI fasta files</summary>
-    a) Get these 4 different things
+  <summary> 1) Download NCBI fasta files for each outgroup </summary>
+  
+   a) [Bat Coronavirus](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SLen_i=29000%20TO%2040000&Completeness_s=complete&VirusLineage_ss=Bat%20SARS%20coronavirus%20HKU3,%20taxid:442736&VirusLineage_ss=Bat%20SARS-like%20coronavirus,%20taxid:1508227&VirusLineage_ss=Bat%20coronavirus,%20taxid:1508220)
+  
+   b) [MERS](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&Completeness_s=complete&VirusLineage_ss=Middle%20East%20respiratory%20syndrome-related%20coronavirus%20(MERS-CoV),%20taxid:1335626&SLen_i=28000%20TO%2035000)
+    
+   c) [SARS-related Coronavirus](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SLen_i=28000%20TO%2035000&Completeness_s=complete&VirusLineage_ss=SARS%20coronavirus%20ExoN1,%20taxid:627440&VirusLineage_ss=SARS%20coronavirus%20wtic-MB,%20taxid:698419&VirusLineage_ss=SARS%20coronavirus%20MA15,%20taxid:633137&VirusLineage_ss=recombinant%20SARSr-CoV,%20taxid:698398)
+    
+   d) [Outgroups](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SLen_i=28000%20TO%2035000&Completeness_s=complete&VirusLineage_ss=Transmissible%20gastroenteritis%20virus,%20taxid:11149)
+   
   </details> <br/>
   
   2) Format names of fasta files from GISAID and NCBI and combine portion of GISAID with NCBI into one fasta
