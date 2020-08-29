@@ -16,7 +16,7 @@ Steps for the analyses that we will do: <br/>
   
    b) [MERS](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&Completeness_s=complete&VirusLineage_ss=Middle%20East%20respiratory%20syndrome-related%20coronavirus%20(MERS-CoV),%20taxid:1335626&SLen_i=28000%20TO%2035000)
     
-   c) [SARS-related Coronavirus](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SLen_i=28000%20TO%2035000&Completeness_s=complete&VirusLineage_ss=SARS%20coronavirus%20ExoN1,%20taxid:627440&VirusLineage_ss=SARS%20coronavirus%20wtic-MB,%20taxid:698419&VirusLineage_ss=SARS%20coronavirus%20MA15,%20taxid:633137&VirusLineage_ss=recombinant%20SARSr-CoV,%20taxid:698398)
+   c) [SARS-related Coronavirus](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Severe%20acute%20respiratory%20syndrome-related%20coronavirus,%20taxid:694009&CollectionDate_dr=2003-01-01T00:00:00.00Z%20TO%202019-10-29T23:59:59.00Z&SLen_i=25000%20TO%2035000)
     
    d) [Outgroups](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&SLen_i=28000%20TO%2035000&Completeness_s=complete&VirusLineage_ss=Transmissible%20gastroenteritis%20virus,%20taxid:11149)
    
